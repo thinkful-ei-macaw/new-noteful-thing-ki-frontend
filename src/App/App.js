@@ -40,7 +40,6 @@ class App extends Component {
 
   ///functions to modify the list
   handleDelete = (noteId) => {
-    console.log("delete");
     fetch(`http://localhost:8080/notes/${noteId}`, {
       method: "DELETE",
       headers: {
@@ -63,7 +62,6 @@ class App extends Component {
     this.setState({
       folders: [...this.state.folders, { name: name }],
     });
-    console.log(this.state.folders);
   };
 
   handleAddNote = (name, folderId, content) => {
@@ -84,7 +82,7 @@ class App extends Component {
       });
   };
   handleGetById = (id) => {
-    fetch(`http://localhost:8080/notes/${id}`)
+    return fetch(`http://localhost:8080/notes/${id}`)
       .then((response) => response.json())
       .then((data) => {
         this.setState({ selectedNote: data });
@@ -129,7 +127,7 @@ class App extends Component {
   renderMainRoutes() {
     const { notes, folders } = this.state;
     const contextValue = {
-      note: this.state.notes,
+      notes: this.state.notes,
       folders: this.state.folders,
       handleDelete: this.handleDelete,
       handleAddNote: this.handleAddNote,
@@ -156,19 +154,17 @@ class App extends Component {
         ))}
         <Route
           path="/note/:noteId"
-          render={(routeProps) => {
-            const { noteId } = routeProps.match.params;
-            console.log(this.state.notes);
-            return (
-              <NotePageMain
-                {...routeProps}
-                note={{
-                  note_name: "placeholder",
-                  note_content: "placeholder",
-                  id: 8,
-                }}
-              />
+          render={(routeprops) => {
+            console.log("this.state.notes is", this.state.notes);
+            console.log(
+              "rprops.match.params.noteId is",
+              routeprops.match.params.noteId
             );
+            let note = findNote(
+              this.state.notes,
+              routeprops.match.params.noteId
+            );
+            return <NotePageMain {...routeprops} note={note} />;
           }}
         />
         <Route
