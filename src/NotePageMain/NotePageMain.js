@@ -8,12 +8,10 @@ export default class NotePageMain extends React.Component {
   static contextType = NotefulContext;
 
   render() {
-    console.log("this.context.notes", this.context.notes);
     const note = findNote(
       this.context.notes,
       Number(this.props.match.params.noteId)
     );
-    console.log("note in");
     if (note) {
       return (
         <section className="NotePageMain">

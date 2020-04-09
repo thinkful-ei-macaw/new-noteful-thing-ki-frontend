@@ -32,6 +32,7 @@ class App extends Component {
     fetch("http://localhost:8080/notes")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         this.setState({
           notes: data,
         });
@@ -143,23 +144,13 @@ class App extends Component {
             key={path}
             path={path}
             render={(routeProps) => {
-              const { folderId } = routeProps.match.params;
-              const notesForFolder = getNotesForFolder(
-                this.state.notes,
-                folderId
-              );
-              return <NoteListMain {...routeProps} notes={notesForFolder} />;
+              return <NoteListMain {...routeProps} />;
             }}
           />
         ))}
         <Route
           path="/note/:noteId"
           render={(routeprops) => {
-            console.log("this.state.notes is", this.state.notes);
-            console.log(
-              "rprops.match.params.noteId is",
-              routeprops.match.params.noteId
-            );
             let note = findNote(
               this.state.notes,
               routeprops.match.params.noteId
